@@ -8,4 +8,4 @@ Given a string of letters, construct an acrostic of bird names!
 
 Caveats
 ---
-May crash if the string contains the letters "q", "u", or "x", as no single-word bird names start with these letters. A possible fix might be to add dummies such as "quetzal", "Xenornis", and "Upupa".
+No single-word bird names start with the letters "q", "u", or "x". I have added "Quetzal", "Xenornis", and "Upupa" so that we can provide an acrostic for any string of letters.

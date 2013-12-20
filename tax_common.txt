@@ -10322,3 +10322,6 @@ Variable Indigobird
 Purple Indigobird
 Green Indigobird
 Parasitic Weaver
+Quetzal
+Xenornis
+Upupa
