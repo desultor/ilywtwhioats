@@ -86,47 +86,40 @@ sub add_children {
   }
 }
 
-use Time::HiRes qw(time);
-my $start = time();
-add_children($tree, "i");
-my $end = time();
-printf("%.4f\n", $end - $start);
-$start = time();
-add_children($tree, "il");
-$end = time();
-printf("%.4f\n", $end - $start);
-$start = time();
-add_children($tree, "ily");
-$end = time();
-printf("%.4f\n", $end - $start);
-$start = time();
-add_children($tree, "ilyw");
-$end = time();
-printf("%.4f\n", $end - $start);
-$start = time();
-add_children($tree, "ilywt");
-$end = time();
-printf("%.4f\n", $end - $start);
-$start = time();
-add_children($tree, "ilywtw");
-$end = time();
-printf("%.4f\n", $end - $start);
-$start = time();
-add_children($tree, "ilywtwh");
-$end = time();
-printf("%.4f\n", $end - $start);
-$start = time();
-add_children($tree, "ilywtwhi");
-$end = time();
-printf("%.4f\n", $end - $start);
-$start = time();
-add_children($tree, "ilywtwhio");
-$end = time();
-printf("%.4f\n", $end - $start);
-$start = time();
-add_children($tree, "ilywtwhioa");
-$end = time();
-printf("%.4f\n", $end - $start);
+
+# OK, that worked logically and correctly, and it was very beautiful to see the
+# trees for shorter strings! However, it appears to be, like, O(e^n). Not very
+# robust! It runs out of RAM on my 16GB machine at "ilywtwhioa".
+
+# Let's try it depth-first. The check_string will come in handy...
+
+sub depth_first {
+  my ($match_string, @previous) = @_;
+  if ($match_string eq "") {
+    print join ", ", @previous;
+    print "\n";
+    return;
+  }
+  foreach my $n (reverse 1..6) {
+    my @res = check_string($match_string, $n);
+    if (@res) {
+      #print "@res\n";
+      foreach my $res (@res) {
+	my @so_far = @previous;
+	push @so_far, $res;
+        depth_first(substr($match_string, $n), @so_far);
+      }
+    }
+  }
+}
+
+depth_first("ilywtwhioats", ());
+
+
+#$start = time();
+#add_children($tree, "ilywtwhioa");
+#$end = time();
+#printf("%.4f\n", $end - $start);
 #print DumpTree($tree);
 #print Tree::Simple::getChildCount($tree);
   #$tree->traverse(sub { my ($_tree) = @_; print (("\t" x $_tree->getDepth()), $_tree->getNodeValue(), "\n"); });
