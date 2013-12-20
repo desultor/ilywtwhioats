@@ -21,61 +21,50 @@ sub create_ngrams {
 }
 
 our %ngrams = create_ngrams();
-print Dumper %ngrams;
+#print Dumper %ngrams;
 
 #my $match_string = "iloveyouwiththewhitehotintensityofathousandsuns";
 my $match_string = "ilywtwhioats";
 
-# i gotta query the parts of this match string
-# how about just randomly?
-#
-# or create a funky state machine?
 
-# start with one-by-one?
+# Now that I've had a chance to sleep on it, let's rethink this.
+# I want to come up with all of the possible sets of bird name acrostics for a
+# given string.
 
-# randomly try one, two, or three characters. If three works, go with it and
-# choose one of the results at random, passing the remnant of the string back
-# in. If three doesn't work, fail down to two. If that doesn't work, fail down
-# to one.
+# The maximum number of letters is six. Given a string, I need to try leading
+# substrings of from 1-6 characters. For each of these which returns a match,
+# I need to save all of the matching birds, and run the remainder of the string
+# through this procedure.
 
-sub carmondize {
-  my $match_string = shift;
-  my $increment = int(rand(3)) + 1;
-  sub try_phrase {
-    my ($match_string, $increment, %ngrams) = @_;
-    if ($ngrams{substr($match_string, 0, $increment)}) {
-      my @candidates = @{$ngrams{substr($match_string, 0, $increment)}};
-      return $candidates[int rand scalar @candidates];
-    } else {
-      return(-1);
-    }
-  }
+# Since I am going to add birds for the letters q, u, and x, I can assume that 
+# at least the single-letter string will always match.
 
-  # if match string is as long as or longer than increment
-  #   try the "increment" section of the match string
-  #   if that worked
-  #     choose a random value
-  #     carmondize the remainder
-  #   if it didn't work
-  #     if increment is greater than one
-  #       subtract one from increment
-  #         try again
-  #     if increment is not greater than one
-  #       die
+# So what does my data structure look like? It's basically a tree. From the 
+# head of the string "ilywtwhioats" I have
+#	 
+# head > Iris Lorikeet > Yellow-winged Tanager > Whistling Heron
+#						 White Hawk
+#						 ...
+#			 Yucatan Woodpecker
+#			 Yellow Wattlebird
+#			 ...
+#			 Yellowbill
+#			 Yellowhammer
+#			 ...
+#	 Ibisbill
+#	 Iiwi
 
+# I can use Tree::Simple to construct such a tree. Then all I have to do is 
+# traverse it recursively, and collect the leaf nodes. Then grab their parents
+# to construct their sequence.
+use Tree::Simple;
 
-
-
-  #print $increment;
-}
-
-#carmondize("foo");
 
 
 ## run at command-line with a single query of letters, e.g. "tst" to return
 ## Three-streaked Tchagra
-#my $query = $ARGV[0];
-#if ($ngrams{$query}) {
-#  print join "\n", @{$ngrams{$query}};
-#  print "\n";
-#}
+my $query = $ARGV[0];
+if ($ngrams{$query}) {
+  print join "\n", @{$ngrams{$query}};
+  print "\n";
+}
