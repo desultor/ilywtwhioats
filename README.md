@@ -10,7 +10,7 @@ Caveats
 ---
 No single-word bird names start with the letters "q", "u", or "x". I have added "Quetzal", "Xenornis", and "Upupa" so that we can provide an acrostic for any string of letters.
 
-Super ridiculously verbose output! Removing some of the extra single-letter matches from the taxonomy might help contain this a little bit.
+Super ridiculously verbose output! Removing some of the extra single-letter matches from the taxonomy might help contain this a little bit. The included file **tax_common_cut.txt** is a stripped-down version which should give less crazy results.
 
 Usage
 ---
