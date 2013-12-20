@@ -10,4 +10,20 @@ Caveats
 ---
 No single-word bird names start with the letters "q", "u", or "x". I have added "Quetzal", "Xenornis", and "Upupa" so that we can provide an acrostic for any string of letters.
 
-Performance gets too slow for longer strings, and memory runs out! I may need to do this depth-first, spitting out lines as I calculate them.
+Super ridiculously verbose output! Removing some of the extra single-letter matches from the taxonomy might help contain this a little bit.
+
+Usage
+---
+Create a file of results using
+```
+perl sonnet.pl > results.txt
+```
+
+This file will easily be 100 GB in size, with 
+
+You can remove rows which contain duplicate names using something like 
+
+```
+cat results.txt | perl -lne '%present = (); my @foo = split ", ", $_; foreach $entry (@foo) {unless ($present{$entry}) {print} $present{$entry}++}' > de_duplicated.txt
+```
+(or just insert that perl command into a pipeline right after running sonnet.pl) but this won't necessarily save you too much space. Maybe something on the order of 1/500 of the results seem to have duplicates in my test case.
