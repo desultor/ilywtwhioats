@@ -16,7 +16,7 @@ Usage
 ---
 Create a file of results using
 ```
-perl sonnet.pl > results.txt
+perl sonnet.pl tax_common_cut.txt ilywtwhioats > results.txt
 ```
 
 This file will easily be 100 GB in size, with 

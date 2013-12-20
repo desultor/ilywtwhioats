@@ -1,12 +1,21 @@
 #!/usr/bin/perl
 
+# USAGE: sonnet.pl taxonomy_file_name  match_string
+
 use warnings;
 use strict;
 use Data::Dumper;
 
+my $taxonomy_file_name = $ARGV[0];
+-e $taxonomy_file_name or die "can't open taxonomy file: $!";
+my $match_string = $ARGV[1];
+$match_string or die "match string not supplied";
+$match_string =~ /^\w+$/ or die "non-word characters";
+$match_string = lc($match_string);
+
 sub create_ngrams {
   my %ngrams;
-  open TAX, "tax_common.txt" or die "can't";
+  open TAX, $taxonomy_file_name or die "can't";
   while (my $species = <TAX>) {
     chomp $species;
     my @words = split /[\. -]/, $species;
@@ -22,10 +31,6 @@ sub create_ngrams {
 
 our %ngrams = create_ngrams();
 #print Dumper %ngrams;
-
-#my $match_string = "iloveyouwiththewhitehotintensityofathousandsuns";
-my $match_string = "ilywtwhioats";
-
 
 # Now that I've had a chance to sleep on it, let's rethink this.
 # I want to come up with all of the possible sets of bird name acrostics for a
@@ -113,7 +118,7 @@ sub depth_first {
   }
 }
 
-depth_first("ilywtwhioats", ());
+depth_first($match_string, ());
 
 
 #$start = time();
