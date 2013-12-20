@@ -5,7 +5,7 @@ use strict;
 use Data::Dumper;
 
 sub create_ngrams {
-  my %ngrams = @_;
+  my %ngrams;
   open TAX, "tax_common.txt" or die "can't";
   while (my $species = <TAX>) {
     chomp $species;
@@ -20,9 +20,8 @@ sub create_ngrams {
   return(%ngrams)
 }
 
-my %ngrams;
-%ngrams = create_ngrams(%ngrams);
-#print Dumper %ngrams;
+our %ngrams = create_ngrams();
+print Dumper %ngrams;
 
 #my $match_string = "iloveyouwiththewhitehotintensityofathousandsuns";
 my $match_string = "ilywtwhioats";
@@ -40,12 +39,12 @@ my $match_string = "ilywtwhioats";
 # to one.
 
 sub carmondize {
-  my ($match_string, %ngrams) = @_;
+  my $match_string = shift;
   my $increment = int(rand(3)) + 1;
   sub try_phrase {
     my ($match_string, $increment, %ngrams) = @_;
     if ($ngrams{substr($match_string, 0, $increment)}) {
-      my @candidates = @{$ngrams{substr(match_string, 0, $increment)}};
+      my @candidates = @{$ngrams{substr($match_string, 0, $increment)}};
       return $candidates[int rand scalar @candidates];
     } else {
       return(-1);
@@ -70,7 +69,7 @@ sub carmondize {
   #print $increment;
 }
 
-#carmondize("foo", %ngrams);
+#carmondize("foo");
 
 
 ## run at command-line with a single query of letters, e.g. "tst" to return
