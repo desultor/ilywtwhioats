@@ -31,6 +31,24 @@ sub create_ngrams {
 
 our %ngrams = create_ngrams();
 
+sub check_string {
+  my ($string, $n) = @_;
+  if ($n > length($string)) {
+    return ();
+  }
+  if ($ngrams{substr($string, 0, $n)}) {
+    return @{$ngrams{substr($string, 0, $n)}};
+  } else {
+    return ();
+  }
+
+}
+
+
+# OK, that worked logically and correctly, and it was very beautiful to see the
+# trees for shorter strings! However, it appears to be, like, O(e^n). Not very
+# robust! It runs out of RAM on my 16GB machine at "ilywtwhioa".
+
 # Let's try it depth-first. The check_string will come in handy...
 
 sub depth_first {
@@ -55,20 +73,3 @@ sub depth_first {
 
 depth_first($match_string, ());
 
-
-#$start = time();
-#add_children($tree, "ilywtwhioa");
-#$end = time();
-#printf("%.4f\n", $end - $start);
-#print DumpTree($tree);
-#print Tree::Simple::getChildCount($tree);
-  #$tree->traverse(sub { my ($_tree) = @_; print (("\t" x $_tree->getDepth()), $_tree->getNodeValue(), "\n"); });
-
-
-## run at command-line with a single query of letters, e.g. "tst" to return
-## Three-streaked Tchagra
-#my $query = $ARGV[0];
-#if ($ngrams{$query}) {
-#  print join "\n", @{$ngrams{$query}};
-#  print "\n";
-#}
